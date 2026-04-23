@@ -13,7 +13,11 @@ public class UsuarioService {
         usuarioDAO.cadastroUsuario(usuario);
     }
 
-    public Usuario selectUser(String uuid){
-        return usuarioDAO.selectUser(uuid);
+    public Usuario login(String email, String senha) {
+        return usuarioDAO.verificarLogin(email, senha);
+    }
+
+    public boolean atualizarUsuario(Usuario usuario, String emailAtual, String senhaAtual) {
+        return usuarioDAO.atualizarUsuario(usuario, emailAtual, senhaAtual);
     }
 }

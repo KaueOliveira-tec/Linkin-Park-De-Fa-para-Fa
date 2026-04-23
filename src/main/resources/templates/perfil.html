@@ -3,55 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Type" content="text/html">
     <link rel="stylesheet" th:href="@{/css/index.css}">
     <script th:src="@{/js/script.js}"></script>
     <title>Perfil do Usuário</title>
 </head>
 <body>
-    <header>
-        <img th:src="@{/img/logo-hybrid-theory.png}" class="img-logo" alt="Logo do álbum Hybrid Theory da banda de rock Linkin Park">
-        <h1>Perfil do Usuário</h1>
-        <nav aria-label="Navegação Principal">
-            <ul>
-                <li><a th:href="@{/}" title="Página Inicial">Home</a></li>
-                <li><a th:href="@{integrantes_originais}" title="Integrantes Originais">Originais</a></li>
-                <li><a th:href="@{integrantes_atuais}" title="Integrantes Atuais">Atuais</a></li>
-                <li><a th:href="@{musicas}" title="Músicas">Músicas</a></li>
-                <li><a th:href="@{form_user}" title="Cadastro">Cadastro</a></li>
-            </ul>
-        </nav>
+    <header class="header">
+        <img th:src="@{img/logo-hybrid-theory.png}" class="header__logo" alt="Logo do álbum Hybrid Theory da banda de rock Linkin Park">
+        <h1 class="header__title">Perfil do Usuário</h1>
+        <div class="header-nav">
+            <nav class="navbar">
+                <ul class="navbar__list">
+                    <li><a th:href="@{/}" title="Página Inicial" class="navbar__link">Home</a></li>
+                    <li><a th:href="@{integrantes_originais}" title="Integrantes Originais" class="navbar__link">Originais</a></li>
+                    <li><a th:href="@{integrantes_atuais}" title="Integrantes Atuais" class="navbar__link">Atuais</a></li>
+                    <li><a th:href="@{musicas}" title="Músicas" class="navbar__link">Músicas</a></li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="navbar__link">Minha Conta</a>
+                        <div class="dropdown__content">
+                            <a th:href="@{/logout}" style="color: #ff4d4d;" class="dropdown__link">Sair</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
     <main class="profile-main-content">
-        <article>
+        <article class="form-container">
             <div th:if="${nomeUsuario}">
-                <h2 th:text="'Bem-vindo(a) ao seu Perfil, ' + ${nomeUsuario} + '!'">Bem-vindo(a) ao seu Perfil!</h2>
+                <h2 class="profile-heading" th:text="'Bem-vindo(a), ' + ${nomeUsuario} + '!'">Bem-vindo(a)!</h2>
                 
                 <section class="profile-details-section">
-                    <h3>Suas Informações</h3>
-                    <ul>
+                    <h3 class="profile-section-title">Suas Informações</h3>
+                    <ul class="profile-details-list">
                         <li><strong>Nome:</strong> <span th:text="${nomeUsuario}"></span></li>
                         <li><strong>Email:</strong> <span th:text="${emailUsuario}"></span></li>
+                        <li class="profile-id-note">ID da conta: <span th:text="${uuid}"></span></li>
                     </ul>
-                    <p>Seus dados foram carregados com sucesso.</p>
                 </section>
+                <div class="profile-actions">
+                    <a th:href="@{/editar_usuario}" class="form-button">Editar informações</a>
+                </div>
             </div>
-            <!--
-            Futuro quadro de aviso de usuário não encontrado
 
-            <div th:unless="${nomeUsuario}" class="no-profile-message">
-                <h2>Acesso Negado</h2>
-                <p>Usuário não encontrado ou não logado. Por favor, <a th:href="@{/form_user}" title="Cadastro">faça seu cadastro</a> ou <a th:href="@{/login}" title="Login">faça login</a> para acessar seu perfil.</p>
-            </div> 
-            -->
+            <div th:unless="${nomeUsuario}" class="profile-guest-block">
+                <h2>Acesso Restrito</h2>
+                <p>Para visualizar seu perfil, você precisa estar logado.</p>
+                <p>Se já tem conta, faça login. Se ainda não tem, cadastre-se agora.</p>
+                <div class="profile-button-group">
+                    <a th:href="@{/login}" class="form-button">Ir para Login</a>
+                    <a th:href="@{/form_user}" class="form-button">Cadastrar-se</a>
+                </div>
+            </div>
         </article>
     </main>
 
-    <footer>
-        <p>
-            Esse é um site para um projeto acadêmico da disciplina Desenvolvimento para Servidores II do curso de Sistemas para Internet da Fatec Rubens Lara, feito para praticar os aprendizados adquiridos ao longo do curso | Feito por: Kauê de Oliveira Martins
-        </p>
+    <footer id="footer">
+        <p>Projeto acadêmico - Desenvolvimento para Servidores II | Fatec Rubens Lara | Sistemas para Internet</p>
+        <p>Feito por: Kauê de Oliveira Martins © 2026</p>
     </footer>
 </body>
 </html>

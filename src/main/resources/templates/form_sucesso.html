@@ -4,23 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/index.css}">
-    <link rel="stylesheet" th:href="@{/css/form_style.css}">
     <script th:src="@{/js/script.js}"></script>
     <title>Cadastro Bem-sucedido</title>
 </head>
 <body>
-    <header>
-        <img th:src="@{/img/logo-hybrid-theory.png}" class="img-logo" alt="Logo do álbum Hybrid Theory da banda de rock Linkin Park">
-        <h1>Área de cadastro</h1>
-        <nav hidden>
-            <ul>
-                <li><a th:href="@{/}" title="Página Inicial">Home</a></li>
-                <li><a th:href="@{integrantes_originais}" title="Integrantes Originais">Originais</a></li>
-                <li><a th:href="@{integrantes_atuais}" title="Integrantes Atuais">Atuais</a></li>
-                <li><a th:href="@{musicas}" title="Músicas">Músicas</a></li>
-                <li><a th:href="@{perfil}" title="Perfil">Perfil</a></li>
-            </ul>
-        </nav>
+    <header class="header">
+        <img th:src="@{/img/logo-hybrid-theory.png}" class="header__logo" alt="Logo do álbum Hybrid Theory da banda de rock Linkin Park">
+        <h1 class="header__title">Área de cadastro</h1>
+        <div class="header-nav">
+            <nav class="navbar" hidden>
+                <ul class="navbar__list">
+                    <li><a th:href="@{/}" title="Página Inicial" class="navbar__link">Home</a></li>
+                    <li><a th:href="@{integrantes_originais}" title="Integrantes Originais" class="navbar__link">Originais</a></li>
+                    <li><a th:href="@{integrantes_atuais}" title="Integrantes Atuais" class="navbar__link">Atuais</a></li>
+                    <li><a th:href="@{musicas}" title="Músicas" class="navbar__link">Músicas</a></li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="navbar__link">Minha Conta</a>
+                        <div class="dropdown__content">
+                            <a th:href="@{/form_user}" class="dropdown__link">Cadastrar</a>
+                            <a th:href="@{/login}" class="dropdown__link">Fazer Login</a> 
+                            <a th:href="@{/perfil}" class="dropdown__link">Ver Perfil</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
     <main>
@@ -34,10 +42,9 @@
         </section>
     </main>
 
-    <footer>
-        <p>
-            Esse é um site para um projeto acadêmico da disciplina Desenvolvimento para Servidores II do curso de Sistemas para Internet da Fatec Rubens Lara, feito para praticar os aprendizados adquiridos ao longo do curso | Feito por: Kauê de Oliveira Martins
-        </p>
+    <footer id="footer">
+        <p>Projeto acadêmico - Desenvolvimento para Servidores II | Fatec Rubens Lara | Sistemas para Internet</p>
+        <p>Feito por: Kauê de Oliveira Martins © 2026</p>
     </footer>
 </body>
 </html>

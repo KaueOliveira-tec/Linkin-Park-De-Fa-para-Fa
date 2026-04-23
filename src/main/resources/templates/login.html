@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <script th:src="@{/js/script.js}"></script>
+    <title>Login - Linkin Park</title>
+</head>
+<body>
+    <header class="header">
+        <img th:src="@{img/logo-hybrid-theory.png}" class="header__logo" alt="Logo do álbum Hybrid Theory da banda de rock Linkin Park">
+        <h1 class="header__title">Acesse sua Conta</h1>
+        <div class="header-nav">
+            <nav class="navbar">
+                <ul class="navbar__list">
+                    <li><a th:href="@{/}" title="Página Inicial" class="navbar__link">Home</a></li>
+                    <li><a th:href="@{/musicas}" title="Músicas" class="navbar__link">Músicas</a></li>
+                    <li><a th:href="@{/integrantes_originais}" title="Integrantes Originais" class="navbar__link">Originais</a></li>
+                    <li><a th:href="@{/integrantes_atuais}" title="Integrantes Atuais" class="navbar__link">Atuais</a></li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="navbar__link">Minha Conta</a>
+                        <div class="dropdown__content">
+                            <a th:href="@{/form_user}" class="dropdown__link">Cadastrar</a>
+                            <a th:href="@{/login}" class="dropdown__link">Fazer Login</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div th:if="${erro}" class="login-error">
+            <p th:text="${erro}"></p>
+        </div>
+
+        <section class="form-container">
+            <form class="form-content" th:action="@{/efetuarLogin}" method="post">
+                
+                <label for="email" class="form-label">E-mail:</label> 
+                <input type="email" id="email" name="email" placeholder="seu@email.com" required class="form-input">
+
+                <label for="senha" class="form-label">Senha:</label>
+                <input type="password" id="senha" name="senha" placeholder="Sua senha" required class="form-input"> 
+                
+                <button type="submit" class="form-button">Entrar</button>
+                
+                <p class="login-helper-text">
+                    Ainda não tem conta? <a th:href="@{/form_user}" class="login-inline-link">Cadastre-se aqui</a>.
+                </p>
+            </form> 
+        </section>
+    </main>
+
+    <footer id="footer">
+        <p>Projeto acadêmico - Desenvolvimento para Servidores II | Fatec Rubens Lara | Sistemas para Internet</p>
+        <p>Feito por: Kauê de Oliveira Martins © 2026</p>
+    </footer>
+</body>
+</html>

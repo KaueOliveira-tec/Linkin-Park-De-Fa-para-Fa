@@ -6,12 +6,12 @@
     <meta http-equiv="Content-Type" content="text/html">
     <link rel="stylesheet" th:href="@{/css/index.css}">
     <script th:src="@{js/script.js}"></script>
-    <title>Cadastro</title>
+    <title>Atualizar Informações</title>
 </head>
 <body>
     <header class="header">
         <img th:src="@{img/logo-hybrid-theory.png}" class="header__logo" alt="Logo do álbum Hybrid Theory da banda de rock Linkin Park">
-        <h1 class="header__title">Área de cadastro</h1>
+        <h1 class="header__title">Atualizar Informações</h1>
         <div class="header-nav">
             <nav class="navbar">
                 <ul class="navbar__list">
@@ -23,7 +23,7 @@
                         <a href="javascript:void(0)" class="navbar__link">Minha Conta</a>
                         <div class="dropdown__content">
                             <a th:href="@{/form_user}" class="dropdown__link">Cadastrar</a>
-                            <a th:href="@{/login}" class="dropdown__link">Fazer Login</a> 
+                            <a th:href="@{/login}" class="dropdown__link">Fazer Login</a>
                         </div>
                     </li>
                 </ul>
@@ -32,21 +32,29 @@
     </header>
 
     <main>
-        <p>Se já se cadastrou no site, <a th:href="@{perfil}" title="Perfil">clique aqui</a> para ver seu perfil</p>
+        <div th:if="${erro}" class="login-error">
+            <p th:text="${erro}"></p>
+        </div>
 
-       <fieldset class="form-container">
-            <form class="form-content" action="#" th:action="@{/usuario}" method=post th:object="${usuario}">
-                <label for="nome" class="form-label">Nome:</label> 
-                <input type="text" id="nome" th:field="*{nome}" placeholder="Insira seu nome" required class="form-input">  
+        <fieldset class="form-container">
+            <form class="form-content" th:action="@{/usuario/atualizar}" method="post" th:object="${usuario}">
+                <label for="currentEmail" class="form-label">E-mail Atual:</label>
+                <input type="email" id="currentEmail" name="emailAtual" placeholder="Informe seu e-mail atual" required class="form-input">
 
-                <label for="email" class="form-label">E-mail:</label> 
-                <input type="email" id="email" th:field="*{email}" placeholder="emailmaneiro@email.com" required class="form-input">
+                <label for="currentSenha" class="form-label">Senha Atual:</label>
+                <input type="password" id="currentSenha" name="senhaAtual" placeholder="Informe sua senha atual" required class="form-input">
 
-                <label for="senha" class="form-label">Senha:</label>
-                <input type="password" id="senha" th:field="*{senha}" placeholder="Sua senha incrível" required class="form-input"> 
-                
-                <button type="submit" value="Cadastro" class="form-button">Cadastrar</button>
-            </form> 
+                <label for="nome" class="form-label">Novo Nome:</label>
+                <input type="text" id="nome" th:field="*{nome}" th:placeholder="${usuario.nome}" required class="form-input">
+
+                <label for="email" class="form-label">Novo E-mail:</label>
+                <input type="email" id="email" th:field="*{email}" th:placeholder="${usuario.email}" required class="form-input">
+
+                <label for="senha" class="form-label">Nova Senha:</label>
+                <input type="password" id="senha" th:field="*{senha}" placeholder="Nova senha" required class="form-input">
+
+                <button type="submit" class="form-button">Atualizar</button>
+            </form>
         </fieldset>
     </main>
 

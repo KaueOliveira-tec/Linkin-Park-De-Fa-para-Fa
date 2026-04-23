@@ -1,20 +1,15 @@
 package com.example.SiteLinkinPark.model;
 
+import java.io.Serializable;
 import java.util.Map;
-import java.util.UUID;
 
-public class Usuario {
+public class Usuario implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String id, nome, email, senha;
 
     //Construtor para o formulario
     public Usuario() {
 
-    }
-
-    //Construtor para usar SELECT
-    public Usuario(String id, String email) {
-        this.id = id;
-        this.email = email;
     }
 
     //Construtor para insert
@@ -58,8 +53,15 @@ public class Usuario {
 
     public static Usuario conversor(Map<String,Object> registro) {
         String nome = (String) registro.get("nome");
-         UUID id = (UUID) registro.get("id");
+        Object idValue = registro.get("id");
+        String id = idValue != null ? idValue.toString() : null;
         String email = (String) registro.get("email");
-        return new Usuario(nome, email, id.toString());
+        String senha = (String) registro.get("senha");
+        Usuario usuario = new Usuario();
+        usuario.setId(id);
+        usuario.setNome(nome);
+        usuario.setEmail(email);
+        usuario.setSenha(senha);
+        return usuario;
     }
 }
