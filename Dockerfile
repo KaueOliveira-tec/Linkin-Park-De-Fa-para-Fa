@@ -12,7 +12,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # ── Etapa 2: Imagem final leve ────────────────────────
-FROM eclipse-temurin:21-jre-jammy
+FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
