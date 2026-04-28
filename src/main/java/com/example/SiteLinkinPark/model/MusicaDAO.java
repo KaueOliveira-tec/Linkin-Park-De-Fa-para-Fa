@@ -30,7 +30,7 @@ public class MusicaDAO {
     }
 
     public List<Musica> listarMusicas() {
-        String sql = "SELECT * FROM musica ORDER BY titulo";
+        String sql = "SELECT * FROM musica ORDER BY album, titulo";
         List<Map<String, Object>> registros = jdbc.queryForList(sql);
         List<Musica> musicas = new ArrayList<>();
         for (Map<String, Object> registro : registros) {

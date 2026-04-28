@@ -48,30 +48,26 @@
 
             <section class="content-section">
                 <p>
-                    Aqui você poderá criar sua playlist com as músicas já cadastradas no banco.
+                    Aqui você poderá criar suas playlists com as músicas que mais gosta.
                 </p>
             </section>
 
-            <section class="content-section" th:if="${session.usuarioLogado == null}">
-                <p>
-                    Você precisa <a th:href="@{/login}">fazer login</a> ou <a th:href="@{/form_user}">cadastrar-se</a>
-                    para salvar suas playlists.
-                </p>
-            </section>
-
-            <section class="content-section" th:if="${session.usuarioLogado != null}">
+            <section class="content-section">
                 <h2>Crie sua playlist</h2>
                 <form class="playlist-form" th:action="@{/playlist}" method="post">
                     <label for="nomePlaylist" class="form-label">Nome da playlist:</label>
                     <input type="text" id="nomePlaylist" name="nomePlaylist" placeholder="Minha playlist favorita" required class="form-input">
 
                     <div class="musicas-selecionaveis">
-                        <p>Escolha as músicas que você mais gosta:</p>
-                        <div class="musica-item" th:each="musica : ${musicas}">
-                            <label>
-                                <input type="checkbox" name="musicaIds" th:value="${musica.id}">
-                                <span th:text="${musica.titulo} + ' — ' + musica.album + ' (' + musica.artista + ')'">Nome da música</span>
-                            </label>
+                        <p>Escolha suas músicas:</p>
+                        <div class="album-article" th:each="albumEntry : ${musicasPorAlbum.entrySet()}">
+                            <h3 class="album-title" th:text="${albumEntry.key}">Álbum</h3>
+                            <div class="musica-item" th:each="musica : ${albumEntry.value}">
+                                <label>
+                                    <input type="checkbox" name="musicaIds" th:value="${musica.id}">
+                                    <span th:text="${musica.titulo}">Nome da música</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
 
@@ -81,12 +77,17 @@
 
             <section class="content-section">
                 <h2>Músicas disponíveis</h2>
-                <ul>
-                    <li th:each="musica : ${musicas}">
-                        <span th:text="${musica.titulo}"></span>
-                        <span th:text="' - ' + musica.album + ' (' + musica.artista + ')'" class="musica-descricao"></span>
-                    </li>
-                </ul>
+                <div class="music-albums" th:each="albumEntry : ${musicasPorAlbum.entrySet()}">
+                    <article class="album-article">
+                        <h3 class="album-title" th:text="${albumEntry.key}">Álbum</h3>
+                        <ul>
+                            <li th:each="musica : ${albumEntry.value}">
+                                <span th:text="${musica.titulo}"></span>
+                                <span th:text="' - ' + musica.artista" class="musica-descricao"></span>
+                            </li>
+                        </ul>
+                    </article>
+                </div>
             </section>
         </div>
     </main>

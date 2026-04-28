@@ -1,6 +1,9 @@
 package com.example.SiteLinkinPark.controller;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +46,11 @@ public class MenuController {
     @GetMapping("/musicas")
     public String musica(HttpSession session, Model model) {
         List<Musica> musicas = musicaService.listarMusicas();
-        model.addAttribute("musicas", musicas);
+        Map<String, List<Musica>> musicasPorAlbum = new LinkedHashMap<>();
+        for (Musica musica : musicas) {
+            musicasPorAlbum.computeIfAbsent(musica.getAlbum(), k -> new ArrayList<>()).add(musica);
+        }
+        model.addAttribute("musicasPorAlbum", musicasPorAlbum);
 
         Usuario user = (Usuario) session.getAttribute("usuarioLogado");
         if (user != null) {

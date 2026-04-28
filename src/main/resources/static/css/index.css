@@ -587,3 +587,23 @@ nav ul li {
     color: #666;
     margin-left: 5px;
 }
+
+.album-article,
+.music-albums {
+    margin-bottom: 24px;
+}
+
+.album-article {
+    border: 1px solid #1711131f;
+    border-radius: 14px;
+    padding: 18px;
+    background: #ffffffd9;
+    box-shadow: 0 6px 18px #17111314;
+}
+
+.album-title {
+    margin: 0 0 12px;
+    font-size: 1.15rem;
+    color: #171113;
+    letter-spacing: 0.5px;
+}
