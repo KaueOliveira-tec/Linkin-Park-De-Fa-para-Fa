@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/index.css}">
     <script th:src="@{js/script.js}"></script>
-    <title>Músicas e Álbuns</title>
+    <title>Minhas Playlists</title>
 </head>
 <body>
     <header class="header">
         <img th:src="@{img/logo-hybrid-theory.png}" class="header__logo" alt="Logo do álbum Hybrid Theory da banda de rock Linkin Park">
-        <h1 class="header__title">Músicas</h1>
+        <h1 class="header__title">Minhas Playlists</h1>
         <div class="header-nav">
             <nav class="navbar">
                 <ul class="navbar__list">
@@ -37,58 +37,31 @@
 
     <main>
         <div class="content-musicas">
-            <h1>Músicas e Álbuns</h1>
-
-            <div th:if="${erro}" class="login-error">
-                <p th:text="${erro}"></p>
-            </div>
             <div th:if="${success}" class="login-success">
                 <p th:text="${success}"></p>
             </div>
-            <div th:if="${session.usuarioLogado != null}" class="playlist-link">
-                <a th:href="@{/playlists}" class="form-button">Ver minhas playlists</a>
-            </div>
 
             <section class="content-section">
-                <p>
-                    Aqui você poderá criar suas playlists com as músicas que mais gosta.
-                </p>
-            </section>
-
-            <section class="content-section">
-                <h2>Crie sua playlist</h2>
-                <form class="playlist-form" th:action="@{/playlist}" method="post">
-                    <label for="nomePlaylist" class="form-label">Nome da playlist:</label>
-                    <input type="text" id="nomePlaylist" name="nomePlaylist" placeholder="Minha playlist favorita" required class="form-input">
-
-                    <div class="musicas-selecionaveis">
-                        <p>Escolha um álbum:</p>
-                        <select id="albumSelect" class="album-select form-input" required>
-                            <option value="" disabled selected>Selecione um álbum</option>
-                            <option th:each="albumEntry : ${musicasPorAlbum.entrySet()}" th:value="${albumEntry.key}" th:text="${albumEntry.key}">Álbum</option>
-                        </select>
-
-                        <div class="album-songs">
-                            <div class="album-article" th:each="albumEntry : ${musicasPorAlbum.entrySet()}" th:data-album="${albumEntry.key}" hidden>
-                                <h3 class="album-title" th:text="${albumEntry.key}">Álbum</h3>
-                                <div class="musica-item" th:each="musica : ${albumEntry.value}">
-                                    <label>
-                                        <input type="checkbox" name="musicaIds" th:value="${musica.id}">
-                                        <span th:text="${musica.titulo}">Nome da música</span>
-                                    </label>
-                                </div>
+                <h2>Suas playlists</h2>
+                <div th:if="${playlists.empty}">
+                    <p>Você ainda não tem playlists. Crie uma agora!</p>
+                    <a th:href="@{/musicas}" class="form-button">Criar playlist</a>
+                </div>
+                <div th:if="${!playlists.empty}">
+                    <ul class="playlist-list">
+                        <li th:each="playlist : ${playlists}">
+                            <div class="playlist-item">
+                                <span class="playlist-name" th:text="${playlist.nome}">Nome da playlist</span>
+                                <a th:href="@{/playlist/{id}(id=${playlist.id})}" class="form-button">Abrir</a>
                             </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="form-button">Salvar playlist</button>
-                </form>
+                        </li>
+                    </ul>
+                </div>
             </section>
         </div>
     </main>
 
     <a href="#" class="voltar--button" title="Voltar ao topo" onclick="scrollToTop(event)">↑</a>
-
 
     <footer id="footer">
         <p>Projeto acadêmico - Desenvolvimento para Servidores II | Fatec Rubens Lara | Sistemas para Internet</p>

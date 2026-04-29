@@ -1,6 +1,9 @@
 package com.example.SiteLinkinPark.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class Playlist implements Serializable {
@@ -9,6 +12,7 @@ public class Playlist implements Serializable {
     private UUID id;
     private UUID usuarioId;
     private String nome;
+    private List<Musica> musicas = new ArrayList<>();
 
     public Playlist() {
     }
@@ -53,5 +57,21 @@ public class Playlist implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public List<Musica> getMusicas() {
+        return musicas;
+    }
+
+    public void setMusicas(List<Musica> musicas) {
+        this.musicas = musicas;
+    }
+
+    public static Playlist conversor(Map<String, Object> registro) {
+        Playlist playlist = new Playlist();
+        playlist.setId(registro.get("id").toString());
+        playlist.setUsuarioId(registro.get("usuario_id").toString());
+        playlist.setNome((String) registro.get("nome"));
+        return playlist;
     }
 }

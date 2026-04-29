@@ -1,9 +1,12 @@
 package com.example.SiteLinkinPark.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.SiteLinkinPark.model.Musica;
 import com.example.SiteLinkinPark.model.MusicaService;
@@ -64,7 +69,8 @@ public class MenuController {
     public String criarPlaylist(@RequestParam String nomePlaylist,
                                 @RequestParam(required = false) List<String> musicaIds,
                                 HttpSession session,
-                                Model model) {
+                                Model model,
+                                RedirectAttributes redirectAttributes) {
         Usuario user = (Usuario) session.getAttribute("usuarioLogado");
         if (user == null) {
             return "redirect:/login";
@@ -77,8 +83,93 @@ public class MenuController {
 
         Playlist playlist = new Playlist(user.getId(), nomePlaylist);
         playlistService.criarPlaylist(playlist, musicaIds);
-        model.addAttribute("success", "Playlist criada com sucesso!");
-        return musica(session, model);
+        redirectAttributes.addFlashAttribute("success", "Playlist criada com sucesso!");
+        return "redirect:/playlist/" + playlist.getId();
+    }
+
+    @GetMapping("/playlists")
+    public String minhasPlaylists(HttpSession session, Model model) {
+        Usuario user = (Usuario) session.getAttribute("usuarioLogado");
+        if (user == null) {
+            return "redirect:/login";
+        }
+        List<Playlist> playlists = playlistService.listarPlaylists(UUID.fromString(user.getId()));
+        model.addAttribute("playlists", playlists);
+        model.addAttribute("nomeUsuario", user.getNome());
+        return "playlists";
+    }
+
+    @GetMapping("/playlist/{playlistId}")
+    public String verPlaylist(@PathVariable String playlistId, HttpSession session, Model model) {
+        Usuario user = (Usuario) session.getAttribute("usuarioLogado");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        Playlist playlist = playlistService.buscarPlaylist(UUID.fromString(playlistId));
+        if (playlist == null || !playlist.getUsuarioId().equals(UUID.fromString(user.getId()))) {
+            return "redirect:/playlists";
+        }
+
+        List<Musica> musicas = musicaService.listarMusicas();
+        Map<String, List<Musica>> musicasPorAlbum = new LinkedHashMap<>();
+        for (Musica musica : musicas) {
+            musicasPorAlbum.computeIfAbsent(musica.getAlbum(), k -> new ArrayList<>()).add(musica);
+        }
+
+        List<String> selectedIds = playlist.getMusicas().stream()
+                .map(Musica::getId)
+                .collect(Collectors.toList());
+
+        model.addAttribute("playlist", playlist);
+        model.addAttribute("musicasPorAlbum", musicasPorAlbum);
+        model.addAttribute("selectedIds", selectedIds);
+        model.addAttribute("nomeUsuario", user.getNome());
+        return "playlist_detalhe";
+    }
+
+    @PostMapping("/playlist/{playlistId}/atualizar")
+    public String atualizarPlaylist(@PathVariable String playlistId,
+                                   @RequestParam(required = false) List<String> musicaIds,
+                                   HttpSession session,
+                                   RedirectAttributes redirectAttributes) {
+        Usuario user = (Usuario) session.getAttribute("usuarioLogado");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        playlistService.atualizarPlaylist(UUID.fromString(playlistId), musicaIds == null ? Collections.emptyList() : musicaIds);
+        redirectAttributes.addFlashAttribute("success", "Playlist atualizada com sucesso!");
+        return "redirect:/playlist/" + playlistId;
+    }
+
+    @PostMapping("/playlist/{playlistId}/musica/{musicaId}/remover")
+    public String removerMusica(@PathVariable String playlistId,
+                                @PathVariable String musicaId,
+                                HttpSession session,
+                                RedirectAttributes redirectAttributes) {
+        Usuario user = (Usuario) session.getAttribute("usuarioLogado");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        playlistService.removerMusica(UUID.fromString(playlistId), musicaId);
+        redirectAttributes.addFlashAttribute("success", "Música removida da playlist.");
+        return "redirect:/playlist/" + playlistId;
+    }
+
+    @PostMapping("/playlist/{playlistId}/deletar")
+    public String deletarPlaylist(@PathVariable String playlistId,
+                                  HttpSession session,
+                                  RedirectAttributes redirectAttributes) {
+        Usuario user = (Usuario) session.getAttribute("usuarioLogado");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        playlistService.deletarPlaylist(UUID.fromString(playlistId));
+        redirectAttributes.addFlashAttribute("success", "Playlist excluída com sucesso!");
+        return "redirect:/playlists";
     }
 
     @GetMapping("/integrantes_originais")

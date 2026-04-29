@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/index.css}">
     <script th:src="@{js/script.js}"></script>
-    <title>Músicas e Álbuns</title>
+    <title th:text="${playlist.nome}">Playlist</title>
 </head>
 <body>
     <header class="header">
         <img th:src="@{img/logo-hybrid-theory.png}" class="header__logo" alt="Logo do álbum Hybrid Theory da banda de rock Linkin Park">
-        <h1 class="header__title">Músicas</h1>
+        <h1 class="header__title" th:text="${playlist.nome}">Playlist</h1>
         <div class="header-nav">
             <nav class="navbar">
                 <ul class="navbar__list">
@@ -37,32 +37,39 @@
 
     <main>
         <div class="content-musicas">
-            <h1>Músicas e Álbuns</h1>
-
-            <div th:if="${erro}" class="login-error">
-                <p th:text="${erro}"></p>
-            </div>
             <div th:if="${success}" class="login-success">
                 <p th:text="${success}"></p>
             </div>
-            <div th:if="${session.usuarioLogado != null}" class="playlist-link">
-                <a th:href="@{/playlists}" class="form-button">Ver minhas playlists</a>
-            </div>
 
             <section class="content-section">
-                <p>
-                    Aqui você poderá criar suas playlists com as músicas que mais gosta.
-                </p>
+                <h2>Detalhes da playlist</h2>
+                <p class="playlist-description">Nome: <strong th:text="${playlist.nome}"></strong></p>
+                <p class="playlist-description">Total de músicas: <strong th:text="${playlist.musicas.size()}"></strong></p>
+            </section>
+
+            <section class="content-section playlist-songs">
+                <h3>Músicas atuais</h3>
+                <div th:if="${playlist.musicas.empty}">
+                    <p>Esta playlist ainda não tem músicas.</p>
+                </div>
+                <ul th:if="${!playlist.musicas.empty}" class="song-list">
+                    <li th:each="musica : ${playlist.musicas}" class="song-row">
+                        <div>
+                            <span class="song-title" th:text="${musica.titulo}">Título</span>
+                            <span class="song-details"> - <span th:text="${musica.album}">Álbum</span> / <span th:text="${musica.artista}">Artista</span></span>
+                        </div>
+                        <form th:action="@{/playlist/{id}/musica/{musicaId}/remover(id=${playlist.id},musicaId=${musica.id})}" method="post">
+                            <button type="submit" class="form-button delete">Remover</button>
+                        </form>
+                    </li>
+                </ul>
             </section>
 
             <section class="content-section">
-                <h2>Crie sua playlist</h2>
-                <form class="playlist-form" th:action="@{/playlist}" method="post">
-                    <label for="nomePlaylist" class="form-label">Nome da playlist:</label>
-                    <input type="text" id="nomePlaylist" name="nomePlaylist" placeholder="Minha playlist favorita" required class="form-input">
-
+                <h3>Atualizar músicas da playlist</h3>
+                <form th:action="@{/playlist/{id}/atualizar(id=${playlist.id})}" method="post">
                     <div class="musicas-selecionaveis">
-                        <p>Escolha um álbum:</p>
+                        <p>Selecione as músicas que devem permanecer na playlist:</p>
                         <select id="albumSelect" class="album-select form-input" required>
                             <option value="" disabled selected>Selecione um álbum</option>
                             <option th:each="albumEntry : ${musicasPorAlbum.entrySet()}" th:value="${albumEntry.key}" th:text="${albumEntry.key}">Álbum</option>
@@ -73,22 +80,30 @@
                                 <h3 class="album-title" th:text="${albumEntry.key}">Álbum</h3>
                                 <div class="musica-item" th:each="musica : ${albumEntry.value}">
                                     <label>
-                                        <input type="checkbox" name="musicaIds" th:value="${musica.id}">
+                                        <input type="checkbox" name="musicaIds" th:value="${musica.id}" th:checked="${selectedIds.contains(musica.id)}">
                                         <span th:text="${musica.titulo}">Nome da música</span>
                                     </label>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <button type="submit" class="form-button">Salvar playlist</button>
+                    <button type="submit" class="form-button">Salvar alterações</button>
                 </form>
+            </section>
+
+            <section class="content-section">
+                <form th:action="@{/playlist/{id}/deletar(id=${playlist.id})}" method="post">
+                    <button type="submit" class="form-button delete">Excluir playlist</button>
+                </form>
+            </section>
+
+            <section class="content-section">
+                <a th:href="@{/playlists}" class="form-button">Voltar para minhas playlists</a>
             </section>
         </div>
     </main>
 
     <a href="#" class="voltar--button" title="Voltar ao topo" onclick="scrollToTop(event)">↑</a>
-
 
     <footer id="footer">
         <p>Projeto acadêmico - Desenvolvimento para Servidores II | Fatec Rubens Lara | Sistemas para Internet</p>
