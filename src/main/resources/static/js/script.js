@@ -20,7 +20,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     albumSelects.forEach(select => {
-        const albumArticles = select.closest('form')?.querySelectorAll('.album-article') || document.querySelectorAll('.album-article');
+        const container = select.closest('.musicas-selecionaveis');
+        if (!container) return;
+        
+        const albumArticles = container.querySelectorAll('.album-article');
         select.addEventListener('change', function () {
             const selectedAlbum = this.value;
             albumArticles.forEach(article => {
