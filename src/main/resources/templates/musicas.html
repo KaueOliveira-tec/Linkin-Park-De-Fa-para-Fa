@@ -46,9 +46,9 @@
                 <p th:text="${success}"></p>
             </div>
             <div th:if="${session.usuarioLogado != null}">
-                <button type="button" class="form-button">
-                    <a th:href="@{/playlists}">Ver minhas playlists</a>
-                </button>        
+                <section class="content-section">
+                    <a th:href="@{/playlists}" class="form-button">Ver minhas playlists</a>
+                </section>        
             </div>
 
             <section class="content-section">
