@@ -47,9 +47,9 @@
                         <li><strong>Email:</strong> <span th:text="${emailUsuario}"></span></li>
                     </ul>
                 </section>
-                <div class="profile-actions">
+                <button type="button" class="profile-actions">
                     <a th:href="@{/editar_usuario}" class="form-button">Editar informações</a>
-                </div>
+                </button>
 
                 <form th:action="@{/usuario/excluir}" method="post" onsubmit="return confirm('Tem certeza que deseja excluir sua conta?');">
                     <input type="hidden" name="email" th:value="${emailUsuario}"/>
@@ -67,10 +67,10 @@
                 <h2>Acesso Restrito</h2>
                 <p>Para visualizar seu perfil, você precisa estar logado.</p>
                 <p>Se já tem conta, faça login. Se ainda não tem, cadastre-se agora.</p>
-                <div class="profile-button-group">
+                <button type="button" class="profile-button-group">
                     <a th:href="@{/login}" class="form-button">Ir para Login</a>
                     <a th:href="@{/form_user}" class="form-button">Cadastrar-se</a>
-                </div>
+                </button>
             </div>
         </article>
     </main>

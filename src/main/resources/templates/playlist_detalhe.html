@@ -76,7 +76,7 @@
                         </select>
 
                         <div class="album-songs">
-                            <div class="album-article" th:each="albumEntry : ${musicasPorAlbum.entrySet()}" th:data-album="${albumEntry.key}" hidden>
+                            <div class="album-article" th:each="albumEntry : ${musicasPorAlbum.entrySet()}" th:data-album="${albumEntry.key}">
                                 <h3 class="album-title" th:text="${albumEntry.key}">Álbum</h3>
                                 <div class="musica-item" th:each="musica : ${albumEntry.value}">
                                     <label>
@@ -97,9 +97,9 @@
                 </form>
             </section>
 
-            
-            <a th:href="@{/playlists}" class="form-button">Voltar para minhas playlists</a>
-            
+            <button type="button" class="form-button">
+                <a th:href="@{/playlists}">Voltar para minhas playlists</a>
+            </button>
         </div>
     </main>
 
